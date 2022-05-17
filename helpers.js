@@ -12,8 +12,6 @@
  */
 exports.asArray = (object) => (object instanceof Array ? object : [object]);
 
-
-
 /**
  * Enable iterating over the keys of an object
  * @type {(object) => IterableIterator<any>}
@@ -32,4 +30,6 @@ exports.makeIterable = (object, sortKeys = false) => {
  * Find the key for a value in given object
  * @type {(value: any, object: Object) => (K extends keyof object ? K : undefined)}
  */
-exports.getKeyIn = (value, object) => {};
+exports.getKeyIn = (value, object) => {
+  for (const [k, v] of this.makeIterable(object)) if (v === value) return k;
+};
