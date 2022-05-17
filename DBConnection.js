@@ -7,7 +7,6 @@
 'use strict';
 
 const mysql = require('mysql2/promise');
-const { makeIterable } = require('./helpers');
 
 const logger = require('./Logger').getInstanceFor('MySQL');
 
