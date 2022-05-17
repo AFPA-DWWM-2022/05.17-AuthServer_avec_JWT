@@ -33,3 +33,14 @@ exports.makeIterable = (object, sortKeys = false) => {
 exports.getKeyIn = (value, object) => {
   for (const [k, v] of this.makeIterable(object)) if (v === value) return k;
 };
+
+/**
+ * Create a subset of an object's properties
+ * @template {Object} T
+ * @type {(object: T, ...keys: string[]) => {[K in keyof T: any]: any}}
+ */
+exports.pick = (object, ...keys) => {
+  let sub = {};
+  for (const k of keys) if (object[k]) sub[k] = object[k];
+  return sub;
+};
