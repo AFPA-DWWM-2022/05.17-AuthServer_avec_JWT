@@ -1,3 +1,10 @@
+/*
+ * app.js (Entry point)
+ * Copyright (C) 2022 Ludovic Fernandez <http://github.com/SirWrexes>
+ *
+ * Distributed under terms of the MIT license.
+ */
+'use strict';
 const path = require('path');
 require('dotenv').config({ path: './.env.dev' });
 
