@@ -50,7 +50,7 @@ class Logger {
     for (const f of asArray(formats)) formatted = formatted[f];
 
     console.log(formatted);
-    fs.appendFile(Logger.logfile, message, ifError);
+    fs.appendFile(Logger.logfile, message + '\n', ifError);
 
     return this;
   }
