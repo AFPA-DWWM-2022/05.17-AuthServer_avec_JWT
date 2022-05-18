@@ -55,14 +55,21 @@ class Logger {
     return this;
   }
 
+  /** @param {string | Error} message */
+  throw(message) {
+    this.#record(message);
+    throw message;
+  };
+
+  err = (message) => this.#record(message, 'red');
+  warn = (message) => this.#record(message, 'yellow');
+  debug = (message) => process.env.APP_DEBUG && this.#record(message, 'gray');
   info = (message) =>
     (process.env.APP_DEBUG || process.env.APP_INFO) && this.#record(message);
-  warn = (message) => this.#record(message, 'yellow');
-  err = (message) => this.#record(message, 'red');
-  debug = (message) => process.env.APP_DEBUG && this.#record(message, 'gray');
 
   /**
    * ! Dangerous !
+   * You probably want to use {@link Logger.throw} instead.
    * This kills the process instantly, before any garbage collection.
    * Should never be used unless absolutely necessary.
    *
