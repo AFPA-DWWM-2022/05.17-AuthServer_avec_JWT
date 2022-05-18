@@ -23,20 +23,20 @@ class DBConnection {
       user: this.#user,
       password: this.#password,
       database: this.#database,
+      namedPlaceholders: true,
     };
   }
 
-  static toString = () => JSON.stringify(this.options);
+  static toString = () => JSON.stringify(this.options, null, 4);
 
   static async spawn() {
     const conn = mysql.createConnection(this.options);
 
     try {
-      logger
-        .info(`Connecting to DB ${this.#database}`)
-        .debug(`↳ with options: ${this.options}`);
       await conn;
-      logger.info('Success !');
+      logger
+        .info(`Connecting to DB ${this.#database} successful`)
+        .debug(`↳ with options: ${this}`);
     } catch (e) {
       logger.error('Something went wrong. See details below.').error(e);
       return undefined;
@@ -44,13 +44,18 @@ class DBConnection {
     return conn;
   }
 
-  /** @type {boolean} */
-  static #checked = false;
-  static async check() {
-    if (!this.#checked)
-      this.#checked = !!(await mysql.createConnection(options));
-    return this.#checked;
+  /**
+   * @param {'die' | 'throw'} onFailure
+   */
+  static async check(onFailure = undefined) {
+    logger.info('Perform connection test').debug(`↳ with options: ${DBConnection}`);
+    try {
+      await mysql.createConnection(this.options);
+      logger.info('Connection successful !');
+    } catch (e) {
+      logger[onFailure](e) || logger.err(e);
+    }
   }
 }
 
-logger.debug(`Connection options:\n${DBConnection.options}`);
+module.exports = DBConnection;
