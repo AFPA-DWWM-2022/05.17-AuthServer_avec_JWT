@@ -8,7 +8,9 @@
 
 /**
  * Transform `object` into an Array if it isn't one already
- * @type {(object: T) => (T extends Array ? T : T[])}
+ *
+ * @template {*} T
+ * @type {(object: T) => (T extends [] ? T : T[])}
  */
 exports.asArray = (object) => (object instanceof Array ? object : [object]);
 
@@ -37,10 +39,12 @@ exports.getKeyIn = (value, object) => {
 /**
  * Create a subset of an object's properties
  * @template {Object} T
- * @type {(object: T, ...keys: string[]) => {[K in keyof T: any]: any}}
+ * @type {(object: T, ...keys: string[]) => {[K in keyof T]: any}}
  */
 exports.pick = (object, ...keys) => {
   let sub = {};
   for (const k of keys) if (object[k]) sub[k] = object[k];
   return sub;
 };
+
+globalThis.Object.pick = this.pick;
