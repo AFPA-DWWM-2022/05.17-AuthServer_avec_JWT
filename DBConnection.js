@@ -16,6 +16,7 @@ class DBConnection {
   static #password = process.env.DATABASE_PASS;
   static #database = process.env.DATABASE_NAME;
 
+  /** @type mysql.ConnectionOptions */
   static get options() {
     return {
       host: this.#host,
@@ -31,38 +32,23 @@ class DBConnection {
     const conn = mysql.createConnection(this.options);
 
     try {
-      logger.info(`Connecting to DB ${this.#database}...`);
+      logger
+        .info(`Connecting to DB ${this.#database}`)
+        .debug(`↳ with options: ${this.options}`);
       await conn;
       logger.info('Success !');
     } catch (e) {
-      logger.err('Something went wrong. See details below.').err(e);
+      logger.error('Something went wrong. See details below.').error(e);
       return undefined;
     }
     return conn;
   }
 
-  constructor() {
-    return this.create();
-  }
-
   /** @type {boolean} */
   static #checked = false;
-
-  /** Check that connection is possible */
   static async check() {
-    if (this.#checked) return true;
-
-    const dummy = mysql.createConnection(options);
-    logger.info(`Checking connection to ${this.#database}`);
-    try {
-      await dummy;
-      logger.info('Success !');
-    } catch (e) {
-      logger.err('Something went wrong. See details below.').err(e);
-    } finally {
-      this.#checked = !!dummy;
-    }
-
+    if (!this.#checked)
+      this.#checked = !!(await mysql.createConnection(options));
     return this.#checked;
   }
 }
