@@ -45,6 +45,7 @@ class Logger {
 
   #record(message, ...formats) {
     message = `${Logger.timestamp} [${this.#source}]: ${message}`;
+    if (message instanceof Error) message += `\n${message.stack}`;
 
     let formatted = message;
     for (const f of asArray(formats)) formatted = formatted[f];
@@ -59,13 +60,12 @@ class Logger {
   throw(message) {
     this.#record(message);
     throw message;
-  };
+  }
 
   err = (message) => this.#record(message, 'red');
   warn = (message) => this.#record(message, 'yellow');
-  debug = (message) => process.env.APP_DEBUG && this.#record(message, 'gray');
-  info = (message) =>
-    (process.env.APP_DEBUG || process.env.APP_INFO) && this.#record(message);
+  info = (message) => process.env.DEBUG && this.#record(message);
+  debug = (message) => process.env.DEBUG == 2 && this.#record(message, 'gray');
 
   /**
    * ! Dangerous !
