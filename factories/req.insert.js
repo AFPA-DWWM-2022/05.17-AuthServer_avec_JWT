@@ -9,25 +9,19 @@
 const { asArray, makeIterable } = require('../helpers');
 
 module.exports = {
+  /**
+   * @typedef {[string]} SqlRequestArray
+   * @typedef {{[name: string]: string}} SqlField
+   * @type {(table: string, fields: SqlField | SqlField[]) => SqlRequestArray}
+   */
   insert: (table, fields) => {
-    const reqs = [];
-
-    for (const f of asArray(fields)) {
-      const names = [];
-      const values = [];
-
-      for (const [n, v] of makeIterable(f)) {
-        names.push(n);
-        values.push(v);
-      }
-
-    console.log(toto);
-      reqs.push(
-        `INSERT INTO ${table} (${names.join(', ')})\n` +
-          `VALUES (${values.map((v) => `'${v}'`).join(', ')})`
-      );
+    for (const /** @type {SqlField} */ f of asArray(fields)) {
+      const destructFields = [...makeIterable(f)];
+      const assignmentList = destructFields
+        .map(([k, v]) => `${k} = ${v}`)
+        .join('\n');
+      reqs.push(`INSERT INTO ${table} SET ${assignmentList}`);
     }
-
     return reqs;
   },
 };
