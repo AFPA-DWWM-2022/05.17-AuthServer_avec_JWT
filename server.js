@@ -17,20 +17,20 @@ const DBConnection = require('./db');
 const logger = require('./Logger').getInstanceFor('Server');
 
 const port = process.env.PORT || 8008;
-const app = express();
+const server = express();
 
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
-app.use(cookieParser());
+server.use(express.static(path.join(__dirname, 'public')));
+server.use(express.urlencoded({ extended: false }));
+server.use(express.json());
+server.use(cookieParser());
 
-app.set('view engine', 'hbs');
+server.set('view engine', 'hbs');
 
-app.use('/', require('./router/pages'));
-app.use('/auth', require('./router/auth'));
+server.use('/', require('./router/pages'));
+server.use('/auth', require('./router/auth'));
 
 if (DBConnection.check())
-  app.listen(port, () => {
+  server.listen(port, () => {
     logger.info(
       `Authentication server is now listening on port ${port}`,
       'bgGreen',
