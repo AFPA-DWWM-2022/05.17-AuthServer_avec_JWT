@@ -22,5 +22,5 @@ module.exports = {
    * At least 8 characters, with at least one occurence of {alpha, num, special}
    * @type RegExValidator
    */
-  pass: (str) => /^(?=.*\w)(?=.*\d)(?=.*\W).{8,}$/.test(str),
+  pass: (str) => /^(?=.*\w)(?=.*\d)(?=.*\W).{8,70}$/.test(str),
 };
