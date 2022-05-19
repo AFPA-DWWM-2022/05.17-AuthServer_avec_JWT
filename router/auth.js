@@ -6,7 +6,15 @@
  */
 'use strict';
 
-module.exports = require('express')
-  .Router()
-  .get('/register', (_, res) => { res.render('register'); })
-  .post('/register', require('../controller/auth').register);
+const AuthCtl = require('../controller/auth');
+const authRouter = require('express').Router();
+
+authRouter
+    .get('/register', (_, res) => res.render('register'))
+    .post('/register', AuthCtl.register);
+
+authRouter
+    .get('/login', (_, res) => res.render('login'))
+    .post('/login', AuthCtl.login);
+
+module.exports = authRouter;
