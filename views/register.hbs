@@ -42,19 +42,22 @@
                     </div>
                     <div class='mb-3'>
                         <label for='password' class='form-label'>Password:</label>
-                        <input type='password' class='form-control' name='password' />
+                        <input type='password' class='form-control' name='pass' />
                     </div>
                     <div class='mb-3'>
                         <label for='passwordConfirm' class='form-label'>Confirm password:</label>
-                        <input type='password' class='form-control' name='passcheck' />
+                        <input type='password' class='form-control' name='check' />
                     </div>
                     <button type='submit' class='btn btn-primary'>Register</button>
                 </form>
             </div>
 
         </div>
+        {{#if error}}
+        <h4 class="alert alert-danger mt-4">{{error}}</h4>
+        {{/if}}
         {{#if message}}
-        <h4 class='alert alert-danger mt-4'>{{message}}</h4>
+        <h4 class='alert alert-success mt-4'>{{message}}</h4>
         {{/if}}
     </div>
 
