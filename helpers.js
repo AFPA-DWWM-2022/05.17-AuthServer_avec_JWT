@@ -6,6 +6,9 @@
  */
 'use strict';
 
+const bcrypt = require('bcrypt');
+const { type } = require('express/lib/response');
+
 /**
  * Transform `object` into an Array if it isn't one already
  *
@@ -48,3 +51,19 @@ exports.pick = (object, ...keys) => {
 };
 
 globalThis.Object.pick = this.pick;
+
+/**
+ * TODO: Implement some more complex salt
+ * @param {string} pass
+ */
+exports.encrypt = async (pass) => {
+  const crypt = {};
+  crypt.hash = await bcrypt.hash(pass, process.env.SALT || 12);
+  crypt.buff = Buffer.from(crypt.hash, 'base64');
+  crypt.hexa = crypt.buff.toString('hex');
+  require('./Logger')
+    .getInstanceFor('Helpers/Auth')
+    .info('Password encryption successful')
+    .debug('↳ ' + JSON.stringify(crypt, null, 4));
+  return crypt;
+};
