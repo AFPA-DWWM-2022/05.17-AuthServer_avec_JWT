@@ -27,7 +27,7 @@ server.use(cookieParser());
 
 server.set('view engine', 'hbs');
 
-server.use('/', require('./router/pages'));
+server.use('/', require('./router/root'));
 server.use('/auth', require('./router/auth'));
 
 async function main() {
